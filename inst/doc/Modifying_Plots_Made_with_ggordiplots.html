@@ -12,50 +12,48 @@
 
 <meta name="author" content="John Quensen" />
 
-<meta name="date" content="2023-08-14" />
+<meta name="date" content="2024-01-14" />
 
 <title>Modifying Plots Made with ggordiplots</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -67,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -343,31 +340,38 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Modifying Plots Made with ggordiplots</h1>
 <h4 class="author">John Quensen</h4>
-<h4 class="date">2023-08-14</h4>
+<h4 class="date">2024-01-14</h4>
 
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>To enable further customization, all functions in this package return silently a list of the data frames used for the plots and the plots themselves These may be captured by assigning the function result to a variable. For <code>gg_ordiplot</code>, for example, get a list of the names of the items returned:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(vegan))</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(ggplot2))</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(ggordiplots))</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">data</span>(<span class="st">&quot;dune&quot;</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">data</span>(<span class="st">&quot;dune.env&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>dune.hel &lt;-<span class="st"> </span><span class="kw">decostand</span>(dune, <span class="dt">method =</span> <span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>ord &lt;-<span class="st"> </span><span class="kw">rda</span>(dune.hel)</span>
-<span id="cb1-8"><a href="#cb1-8"></a>my.plot &lt;-<span class="st"> </span><span class="kw">gg_ordiplot</span>(ord, <span class="dt">groups =</span> dune.env<span class="op">$</span>Management, <span class="dt">hull =</span> <span class="ot">TRUE</span>, <span class="dt">spiders =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb1-9"><a href="#cb1-9"></a>    <span class="dt">ellipse =</span> <span class="ot">FALSE</span>, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">names</span>(my.plot)</span></code></pre></div>
+<p>To enable further customization, all functions in this package return
+silently a list of the data frames used for the plots and the plots
+themselves These may be captured by assigning the function result to a
+variable. For <code>gg_ordiplot</code>, for example, get a list of the
+names of the items returned:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(vegan))</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(ggplot2))</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(ggordiplots))</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;dune&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;dune.env&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>dune.hel <span class="ot">&lt;-</span> <span class="fu">decostand</span>(dune, <span class="at">method =</span> <span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>ord <span class="ot">&lt;-</span> <span class="fu">rda</span>(dune.hel)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>my.plot <span class="ot">&lt;-</span> <span class="fu">gg_ordiplot</span>(ord, <span class="at">groups =</span> dune.env<span class="sc">$</span>Management, <span class="at">hull =</span> <span class="cn">TRUE</span>, <span class="at">spiders =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="at">ellipse =</span> <span class="cn">FALSE</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">names</span>(my.plot)</span></code></pre></div>
 <pre><code>## [1] &quot;df_ord&quot;      &quot;df_mean.ord&quot; &quot;df_ellipse&quot;  &quot;df_hull&quot;     &quot;df_spiders&quot; 
 ## [6] &quot;plot&quot;</code></pre>
-<p>The last object in the list is the plot itself. You can capture the plot and make modifications by adding <code>ggplot2</code> labels and themes:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>a.plot &lt;-<span class="st"> </span>my.plot<span class="op">$</span>plot</span>
-<span id="cb3-2"><a href="#cb3-2"></a>a.plot <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">color =</span> <span class="st">&quot;Management&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;PCA 1&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;PCA 2&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;My Title&quot;</span>) <span class="op">+</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>))  <span class="co"># centers main title, ggplot2 version 2.2+</span></span></code></pre></div>
+<p>The last object in the list is the plot itself. You can capture the
+plot and make modifications by adding <code>ggplot2</code> labels and
+themes:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>a.plot <span class="ot">&lt;-</span> my.plot<span class="sc">$</span>plot</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>a.plot <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Management&quot;</span>, <span class="at">x =</span> <span class="st">&quot;PCA 1&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PCA 2&quot;</span>, <span class="at">title =</span> <span class="st">&quot;My Title&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  <span class="co"># centers main title, ggplot2 version 2.2+</span></span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>The other items in the list are the data frames used for the plot layers:</p>
+<p>The other items in the list are the data frames used for the plot
+layers:</p>
 <table>
 <thead>
 <tr class="header">
@@ -399,7 +403,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tbody>
 </table>
 <p>You can check the first few lines of each data frame thus:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">head</span>(my.plot<span class="op">$</span>df_spiders)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">head</span>(my.plot<span class="sc">$</span>df_spiders)</span></code></pre></div>
 <pre><code>##    Group    cntr.x       cntr.y         x           y
 ## 2     BF 0.1995202 -0.009619176 0.1970059  0.16455540
 ## 10    BF 0.1995202 -0.009619176 0.2505024 -0.06096196
@@ -408,29 +412,34 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ## 6     HF 0.1070437  0.041316511 0.2152557 -0.09089893
 ## 7     HF 0.1070437  0.041316511 0.2497939 -0.03067965</code></pre>
 <p>The <code>ggplot2</code> statements I used for each layer are:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Basic ordination plot:</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>xlab &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;Axis&quot;</span>, choices[<span class="dv">1</span>], <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a>ylab &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;Axis&quot;</span>, choices[<span class="dv">2</span>], <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="kw">geom_point</span>(<span class="dt">data =</span> df_ord, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">color =</span> Group), <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(xlab) <span class="op">+</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="st">    </span><span class="kw">ylab</span>(ylab)</span>
-<span id="cb6-6"><a href="#cb6-6"></a></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co"># Plot ellipses:</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="kw">geom_path</span>(<span class="dt">data =</span> df_ellipse, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">color =</span> Group), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb6-9"><a href="#cb6-9"></a></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="co"># Plot centroid labels:</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="kw">geom_text</span>(<span class="dt">data =</span> df_mean.ord, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">label =</span> Group, <span class="dt">color =</span> Group), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb6-12"><a href="#cb6-12"></a></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="co"># Plot hulls:</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="kw">geom_path</span>(<span class="dt">data =</span> df_hull, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">color =</span> Group), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb6-15"><a href="#cb6-15"></a></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="co"># Plot spiders:</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="kw">geom_segment</span>(<span class="dt">data =</span> df_spiders, <span class="kw">aes</span>(<span class="dt">x =</span> cntr.x, <span class="dt">xend =</span> x, <span class="dt">y =</span> cntr.y, <span class="dt">yend =</span> y, <span class="dt">color =</span> Group),</span>
-<span id="cb6-18"><a href="#cb6-18"></a>    <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb6-19"><a href="#cb6-19"></a></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="co"># Plot cluster segments:</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a><span class="kw">geom_segment</span>(<span class="dt">data =</span> df_segments, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">xend =</span> xend, <span class="dt">yend =</span> yend))</span></code></pre></div>
-<p>With the above information and some knowledge of <code>ggplot2</code> you can modify the plots however you wish. And to learn more, you can inspect the code by entering <code>gg_ordiplot</code> or any other function written in R (i.e. not compiled) without parentheses. As a short example, the hidden function in <code>vegan</code> for generating data for an ellipse is:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>vegan<span class="op">:::</span>veganCovEllipse</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Basic ordination plot:</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>xlab <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Axis&quot;</span>, choices[<span class="dv">1</span>], <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>ylab <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Axis&quot;</span>, choices[<span class="dv">2</span>], <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">geom_point</span>(<span class="at">data =</span> df_ord, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Group), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">xlab</span>(xlab) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="fu">ylab</span>(ylab)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># Plot ellipses:</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">geom_path</span>(<span class="at">data =</span> df_ellipse, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Group), <span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># Plot centroid labels:</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">geom_text</span>(<span class="at">data =</span> df_mean.ord, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label =</span> Group, <span class="at">color =</span> Group), <span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co"># Plot hulls:</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="fu">geom_path</span>(<span class="at">data =</span> df_hull, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Group), <span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co"># Plot spiders:</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">geom_segment</span>(<span class="at">data =</span> df_spiders, <span class="fu">aes</span>(<span class="at">x =</span> cntr.x, <span class="at">xend =</span> x, <span class="at">y =</span> cntr.y, <span class="at">yend =</span> y, <span class="at">color =</span> Group),</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>    <span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co"># Plot cluster segments:</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="fu">geom_segment</span>(<span class="at">data =</span> df_segments, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend))</span></code></pre></div>
+<p>With the above information and some knowledge of <code>ggplot2</code>
+you can modify the plots however you wish. And to learn more, you can
+inspect the code by entering <code>gg_ordiplot</code> or any other
+function written in R (i.e. not compiled) without parentheses. As a
+short example, the hidden function in <code>vegan</code> for generating
+data for an ellipse is:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>vegan<span class="sc">:::</span>veganCovEllipse</span></code></pre></div>
 <pre><code>## function (cov, center = c(0, 0), scale = 1, npoints = 100) 
 ## {
 ##     theta &lt;- (0:npoints) * 2 * pi/npoints
@@ -439,14 +448,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ##     o &lt;- attr(Q, &quot;pivot&quot;)
 ##     t(center + scale * t(Circle %*% Q[, o]))
 ## }
-## &lt;bytecode: 0x0000028009089020&gt;
+## &lt;bytecode: 0x0000027a95ab1b50&gt;
 ## &lt;environment: namespace:vegan&gt;</code></pre>
 </div>
 <div id="examples" class="section level1">
 <h1>Examples</h1>
-<p>Say you want to make an ordination plot with points distinguished by two variables assigned to symbol shape and symbol color. You can do this by extracting <code>df_ord</code> from a plot result and adding a second grouping variable. Continuing with the example from above:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>ord.data &lt;-<span class="st"> </span>my.plot<span class="op">$</span>df_ord</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">head</span>(ord.data)</span></code></pre></div>
+<p>Say you want to make an ordination plot with points distinguished by
+two variables assigned to symbol shape and symbol color. You can do this
+by extracting <code>df_ord</code> from a plot result and adding a second
+grouping variable. Continuing with the example from above:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>ord.data <span class="ot">&lt;-</span> my.plot<span class="sc">$</span>df_ord</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">head</span>(ord.data)</span></code></pre></div>
 <pre><code>##            x           y Group
 ## 1 0.23409791  0.19110003    SF
 ## 2 0.19700590  0.16455540    BF
@@ -454,9 +466,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ## 4 0.02267027  0.22032168    SF
 ## 5 0.25321647 -0.02333147    HF
 ## 6 0.21525573 -0.09089893    HF</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>ord.data<span class="op">$</span>Use &lt;-<span class="st"> </span>dune.env<span class="op">$</span>Use</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">colnames</span>(ord.data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;Management&quot;</span>, <span class="st">&quot;Use&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="kw">head</span>(ord.data)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>ord.data<span class="sc">$</span>Use <span class="ot">&lt;-</span> dune.env<span class="sc">$</span>Use</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">colnames</span>(ord.data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;Management&quot;</span>, <span class="st">&quot;Use&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">head</span>(ord.data)</span></code></pre></div>
 <pre><code>##            x           y Management      Use
 ## 1 0.23409791  0.19110003         SF Haypastu
 ## 2 0.19700590  0.16455540         BF Haypastu
@@ -464,22 +476,24 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ## 4 0.02267027  0.22032168         SF Haypastu
 ## 5 0.25321647 -0.02333147         HF Hayfield
 ## 6 0.21525573 -0.09089893         HF Haypastu</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> ord.data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">color =</span> Management, <span class="dt">shape =</span> Use)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;PCA 1&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;PCA 2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ord.data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Management, <span class="at">shape =</span> Use)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;PCA 1&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;PCA 2&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Using shapes for an ordinal variable is not advised</code></pre>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>As long as you start from the same data, you can take plots and data frames generated with different functions and combine them in new ways. For example, add a dendrogram to an ellipse plot.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">data</span>(<span class="st">&quot;dune&quot;</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">data</span>(<span class="st">&quot;dune.env&quot;</span>)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>dune.bray &lt;-<span class="st"> </span><span class="kw">vegdist</span>(dune, <span class="dt">method =</span> <span class="st">&quot;bray&quot;</span>)</span>
-<span id="cb15-4"><a href="#cb15-4"></a>ord &lt;-<span class="st"> </span><span class="kw">cmdscale</span>(dune.bray, <span class="dt">k =</span> <span class="kw">nrow</span>(dune) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">eig =</span> <span class="ot">TRUE</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p>As long as you start from the same data, you can take plots and data
+frames generated with different functions and combine them in new ways.
+For example, add a dendrogram to an ellipse plot.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;dune&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;dune.env&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>dune.bray <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(dune, <span class="at">method =</span> <span class="st">&quot;bray&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>ord <span class="ot">&lt;-</span> <span class="fu">cmdscale</span>(dune.bray, <span class="at">k =</span> <span class="fu">nrow</span>(dune) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">eig =</span> <span class="cn">TRUE</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## Warning in cmdscale(dune.bray, k = nrow(dune) - 1, eig = TRUE, add = TRUE):
 ## only 18 of the first 19 eigenvalues are &gt; 0</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>cl &lt;-<span class="st"> </span><span class="kw">hclust</span>(dune.bray, <span class="dt">method =</span> <span class="st">&quot;single&quot;</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a>clstr.plot &lt;-<span class="st"> </span><span class="kw">gg_ordicluster</span>(ord, <span class="dt">cluster =</span> cl, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>ellipse.plot &lt;-<span class="st"> </span><span class="kw">gg_ordiplot</span>(ord, <span class="dt">groups =</span> dune.env<span class="op">$</span>Management, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb17-4"><a href="#cb17-4"></a>ellipse.plot<span class="op">$</span>plot <span class="op">+</span><span class="st"> </span><span class="kw">geom_segment</span>(<span class="dt">data =</span> clstr.plot<span class="op">$</span>df_segments, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    <span class="dt">xend =</span> xend, <span class="dt">yend =</span> yend))</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dune.bray, <span class="at">method =</span> <span class="st">&quot;single&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>clstr.plot <span class="ot">&lt;-</span> <span class="fu">gg_ordicluster</span>(ord, <span class="at">cluster =</span> cl, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>ellipse.plot <span class="ot">&lt;-</span> <span class="fu">gg_ordiplot</span>(ord, <span class="at">groups =</span> dune.env<span class="sc">$</span>Management, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>ellipse.plot<span class="sc">$</span>plot <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="at">data =</span> clstr.plot<span class="sc">$</span>df_segments, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>    <span class="at">xend =</span> xend, <span class="at">yend =</span> yend))</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>Enjoy!</p>
 </div>

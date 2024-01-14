@@ -1,4 +1,4 @@
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 suppressPackageStartupMessages(library(vegan))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(ggordiplots))
@@ -9,17 +9,17 @@ ord <- rda(dune.hel)
 my.plot <- gg_ordiplot(ord, groups = dune.env$Management, hull = TRUE, spiders = TRUE, ellipse = FALSE, plot = FALSE)
 names(my.plot)
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 a.plot <- my.plot$plot
 a.plot + 
   theme_bw() +
   labs(color="Management", x="PCA 1", y="PCA 2", title="My Title") +
   theme(plot.title = element_text(hjust = 0.5)) # centers main title, ggplot2 version 2.2+
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 head(my.plot$df_spiders)
 
-## ---- eval=FALSE, tidy=TRUE---------------------------------------------------
+## ----eval=FALSE, tidy=TRUE----------------------------------------------------
 #  # Basic ordination plot:
 #  xlab <- paste("Axis", choices[1], sep = " ")
 #  ylab <- paste("Axis", choices[2], sep = " ")
@@ -41,10 +41,10 @@ head(my.plot$df_spiders)
 #  # Plot cluster segments:
 #  geom_segment(data=df_segments, aes(x=x, y=y, xend=xend, yend=yend))
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 vegan:::veganCovEllipse
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 ord.data <- my.plot$df_ord
 head(ord.data)
 ord.data$Use <- dune.env$Use
@@ -53,7 +53,7 @@ head(ord.data)
 ggplot(data=ord.data, aes(x=x, y=y, color=Management, shape=Use)) +
   geom_point(size=3) + xlab("PCA 1") + ylab("PCA 2")
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 data("dune")
 data("dune.env")
 dune.bray <- vegdist(dune, method="bray")
